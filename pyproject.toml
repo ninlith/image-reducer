@@ -1,0 +1,19 @@
+[project]
+name = "kollikissa"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Okko Hartikainen", email = "okko.hartikainen@yandex.com"},
+]
+dependencies = ["Pillow>=11.1.0", "pillow-avif-plugin>=1.4.6"]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
