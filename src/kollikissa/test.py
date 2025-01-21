@@ -43,7 +43,7 @@ def compress_image(input_path: Path) -> Path:
     output_path = Path("output")/input_path.with_suffix('.avif').name
     image.save(
         output_path,
-        format="AVIF",
+        format="AVIF",          # image format (set if using a file object instead of a filename)
         quality=50,             # quality level (0-100)  
         speed=0,                # encoding speed (-1 default, 0 slowest = best quality, 10 fastest)
         range="limited",        # YUV range (full, limited)
