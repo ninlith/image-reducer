@@ -1,7 +1,7 @@
 [project]
 name = "kollikissa"
 version = "0.1.0"
-description = "Default template for PDM package"
+description = "Image processing service."
 authors = [
     {name = "Okko Hartikainen", email = "okko.hartikainen@yandex.com"},
 ]
@@ -21,9 +21,12 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm.scripts]
-start = "uvicorn kollikissa.main:app --host 0.0.0.0 --port 8000 --reload"
-test = "pytest -v -s"
+start = "uvicorn src.kollikissa.main:app --host 0.0.0.0 --port 8000 --reload"
+test = "pytest --verbose --capture=no"
 lint = "pylint src/ tests/"
+dbuild = "sudo docker build . -t kollikissa"
+drun = "sudo docker run --interactive --tty --rm --publish 8000:8000 kollikissa"
+dbash = "sudo docker run --interactive --tty --rm --publish 8000:8000 kollikissa /bin/bash"
 
 [dependency-groups]
 dev = [

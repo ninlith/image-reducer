@@ -46,7 +46,7 @@ def filter_exif(exif: Image.Exif) -> Image.Exif:
 
 
 def process_image_blocking(file_content: bytes) -> io.BytesIO:
-    """Verify, scale, and convert the image and return it as a bytes object."""
+    """Verify, scale, and convert the image and return it as a BytesIO object."""
     image = Image.open(io.BytesIO(file_content))
     image.verify()  # "...after using this method, you must reopen the image file."
     image = Image.open(io.BytesIO(file_content))
@@ -67,14 +67,14 @@ def process_image_blocking(file_content: bytes) -> io.BytesIO:
         xmp=None,               # XMP data
         icc_profile=None,       # ICC profile
     )
-    output_buffer.seek(0)
+    output_buffer.seek(0)  # rewind the buffer
     return output_buffer
 
 
 @app.get("/", include_in_schema=False)
 def read_root():
     """Redirect to the interactive API docs."""
-    return RedirectResponse(url='/docs')
+    return RedirectResponse(url="/docs")
 
 
 @app.post(
@@ -90,7 +90,7 @@ async def process_image(file: UploadFile = File(...)):
     """Return the processed image."""
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=422, detail=INVALID_MIME_ERROR)
-    file_content = await file.read()  # Read the file into memory
+    file_content = await file.read()  # read the file into memory
     try:
         output_buffer = await asyncio.to_thread(process_image_blocking, file_content)
     except UnidentifiedImageError as exc:
