@@ -1,4 +1,4 @@
-"""Image conversion tests."""
+"""Image processing tests."""
 
 import asyncio
 import io
@@ -41,8 +41,8 @@ async def make_concurrent_requests(num_requests: int, image_bytes):
 
 
 @pytest.mark.asyncio
-async def test_conversion():
-    """Test the performance and correctness of the image conversion."""
+async def test_processing():
+    """Test the performance and correctness of the image processing."""
 
     async def time_concurrent_requests(num_requests: int, image_bytes):
         start_time = time.perf_counter()

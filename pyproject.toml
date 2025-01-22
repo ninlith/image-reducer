@@ -24,9 +24,9 @@ build-backend = "pdm.backend"
 start = "uvicorn src.kollikissa.main:app --host 0.0.0.0 --port 8000 --reload"
 test = "pytest --verbose --capture=no"
 lint = "pylint src/ tests/"
-dbuild = "sudo docker build . -t kollikissa"
-drun = "sudo docker run --interactive --tty --rm --publish 8000:8000 kollikissa"
-dbash = "sudo docker run --interactive --tty --rm --publish 8000:8000 kollikissa /bin/bash"
+db = "sudo docker build . -t kollikissa"
+dr = "sudo docker run --interactive --tty --rm --publish 8000:8000 kollikissa {args}"
+dbr = {composite = ["db", "dr {args}"]}
 
 [dependency-groups]
 dev = [
