@@ -57,7 +57,7 @@ def process_image_blocking(file_content: bytes) -> io.BytesIO:
         output_buffer,
         format="AVIF",          # image format (set if using a file object instead of a filename)
         quality=50,             # quality level (0-100)
-        speed=0,                # encoding speed (-1 default, 0 slowest = best quality, 10 fastest)
+        speed=5,                # encoding speed (-1 default, 0 slowest = best quality, 10 fastest)
         range="limited",        # YUV range (full, limited)
         subsampling='4:2:0',    # chroma subsampling (4:4:4, 4:2:2, 4:2:0, 4:0:0 = grayscale)
         advanced={

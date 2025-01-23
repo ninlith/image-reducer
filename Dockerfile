@@ -16,7 +16,7 @@ COPY . .
 # Install the application and its dependencies into the virtual environment.
 RUN pdm install --production --frozen-lockfile --no-editable --quiet
 
-# Activate the virtual environment in case stopped at this stage (--target builder).
+# Activate the virtual environment in case the build is stopped at this stage (with --target).
 ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
