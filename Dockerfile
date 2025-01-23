@@ -1,5 +1,5 @@
 # Set the base image.
-ARG IMAGE=python:3.11-alpine
+ARG IMAGE=python:3-alpine
 
 # Build stage.
 FROM $IMAGE AS builder
