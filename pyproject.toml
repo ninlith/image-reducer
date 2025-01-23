@@ -20,13 +20,16 @@ license = {text = "MIT"}
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
+[tool.pdm]
+distribution = true
+
 [tool.pdm.scripts]
-start = "uvicorn src.kollikissa.main:app --host 0.0.0.0 --port 8000 --reload"
+start = "uvicorn kollikissa.main:app --host 0.0.0.0 --port 8000 --reload"
 test = "pytest --verbose --capture=no"
 lint = "pylint src/ tests/"
-db = "sudo docker build . -t kollikissa"
-dr = "sudo docker run --interactive --tty --rm --publish 8000:8000 kollikissa {args}"
-dbr = {composite = ["db", "dr {args}"]}
+b = "sudo docker build {args} -t kollikissa ."
+r = "sudo docker run --interactive --tty --rm --publish 8000:8000 kollikissa {args}"
+br = {composite = ["b", "r {args}"]}
 
 [dependency-groups]
 dev = [

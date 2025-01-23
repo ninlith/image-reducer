@@ -1,5 +1,8 @@
+# Set the base image.
+ARG IMAGE=python:3.11-alpine
+
 # Build stage.
-FROM python:3.11-slim as builder
+FROM $IMAGE AS builder
 
 # Set the working directory in the container.
 WORKDIR /app
@@ -7,42 +10,31 @@ WORKDIR /app
 # Install PDM.
 RUN pip install --no-cache-dir --disable-pip-version-check --root-user-action=ignore pdm
 
-# Copy the files needed by PDM for dependency installation.
-COPY pyproject.toml .
-COPY pdm.lock .
-COPY README.md .
-
-# Install dependencies in production mode.
-# RUN pdm install --production --frozen-lockfile --no-editable --quiet
-
-# Build the application.
-RUN pdm build --no-sdist --quiet
-
-# Copy the rest of the application.
+# Copy the source code into the container.
 COPY . .
 
+# Install the application and its dependencies into the virtual environment.
+RUN pdm install --production --frozen-lockfile --no-editable --quiet
+
+# Activate the virtual environment in case stopped at this stage (--target builder).
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 # Final stage.
-FROM python:3.11-alpine
+FROM $IMAGE
 
 # Set the working directory in the container.
 WORKDIR /app
 
-# Copy the application from the previous stage.
-COPY --from=builder /app/dist dist
-COPY --from=builder /app/src src
+# Copy the virtual environment from the previous stage.
+COPY --from=builder /app/.venv .venv
 
-# Install dependencies.
-RUN pip install --no-cache --disable-pip-version-check --root-user-action=ignore dist/*.whl
-
-# Uninstall unneeded packages.
-RUN pip uninstall --yes --root-user-action=ignore pip setuptools wheel
+# Activate the virtual environment.
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Make port 8000 available to the world outside the container.
 EXPOSE 8000
 
-# Set environment variables to use the virtual environment.
-ENV VIRTUAL_ENV=/app/.venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
 # Run the application.
-CMD ["uvicorn", "src.kollikissa.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "kollikissa.main:app", "--host", "0.0.0.0", "--port", "8000"]

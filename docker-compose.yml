@@ -6,4 +6,4 @@ services:
     environment:
       - VIRTUAL_ENV=/app/.venv
       - PATH=/app/.venv/bin:$PATH
-    command: uvicorn src.kollikissa.main:app --host 0.0.0.0 --port 8000
+    command: uvicorn kollikissa.main:app --host 0.0.0.0 --port 8000
