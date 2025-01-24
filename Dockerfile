@@ -18,6 +18,10 @@ COPY . .
 # Install the application and its dependencies into a virtual environment.
 RUN pdm install --production --frozen-lockfile --no-editable --quiet
 
+# Strip debugging symbols from pillow-avif-plugin to reduce size.
+RUN apk --update add binutils
+RUN strip --strip-debug .venv/lib/python*/site-packages/pillow_avif/*.so
+
 # Activate the virtual environment in case the build is stopped at this stage (with --target).
 ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
