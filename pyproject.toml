@@ -1,5 +1,5 @@
 [project]
-name = "kollikissa"
+name = "image-reducer"
 version = "0.1.0"
 description = "Image processing service."
 authors = [
@@ -24,11 +24,11 @@ build-backend = "pdm.backend"
 distribution = true
 
 [tool.pdm.scripts]
-start = "uvicorn kollikissa.main:app --host 0.0.0.0 --port 8000 --reload"
+start = "uvicorn image_reducer.main:app --host 0.0.0.0 --port 8000 --reload"
 test = "pytest --verbose --capture=no"
 lint = "pylint src/ tests/"
-b = "sudo docker build {args} -t kollikissa ."
-r = "sudo docker run --interactive --tty --rm --publish 8000:8000 kollikissa {args}"
+b = "sudo docker build {args} -t image-reducer ."
+r = "sudo docker run --interactive --tty --rm --publish 8000:8000 image-reducer {args}"
 br = {composite = ["b", "r {args}"]}
 
 [dependency-groups]

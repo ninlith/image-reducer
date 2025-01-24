@@ -37,4 +37,4 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 EXPOSE 8000
 
 # Run the application.
-CMD ["uvicorn", "kollikissa.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "image_reducer.main:app", "--host", "0.0.0.0", "--port", "8000"]

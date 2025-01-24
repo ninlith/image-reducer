@@ -1,4 +1,4 @@
-# kollikissa
+# image-reducer
 
 Image processing service.
 

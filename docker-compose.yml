@@ -1,9 +1,9 @@
 services:
-  kollikissa:
+  image-reducer:
     build: .
     ports:
       - "8000:8000"
     environment:
       - VIRTUAL_ENV=/app/.venv
       - PATH=/app/.venv/bin:$PATH
-    command: uvicorn kollikissa.main:app --host 0.0.0.0 --port 8000
+    command: uvicorn image_reducer.main:app --host 0.0.0.0 --port 8000

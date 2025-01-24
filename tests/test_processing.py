@@ -7,7 +7,7 @@ import pytest
 from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
 from PIL import Image
-from kollikissa.main import app, INVALID_MIME_ERROR, INVALID_IMAGE_ERROR
+from image_reducer.main import app, INVALID_MIME_ERROR, INVALID_IMAGE_ERROR
 
 client = TestClient(app)
 
