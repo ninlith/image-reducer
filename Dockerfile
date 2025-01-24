@@ -1,7 +1,9 @@
 # Set the base image.
 ARG IMAGE=python:3-alpine
 
+# ----------------------------------------------------------------------------
 # Build stage.
+# ----------------------------------------------------------------------------
 FROM $IMAGE AS builder
 
 # Set the working directory in the container.
@@ -13,14 +15,16 @@ RUN pip install --no-cache-dir --disable-pip-version-check --root-user-action=ig
 # Copy the source code into the container.
 COPY . .
 
-# Install the application and its dependencies into the virtual environment.
+# Install the application and its dependencies into a virtual environment.
 RUN pdm install --production --frozen-lockfile --no-editable --quiet
 
 # Activate the virtual environment in case the build is stopped at this stage (with --target).
 ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
+# ----------------------------------------------------------------------------
 # Final stage.
+# ----------------------------------------------------------------------------
 FROM $IMAGE
 
 # Set the working directory in the container.

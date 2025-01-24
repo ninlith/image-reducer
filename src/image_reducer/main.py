@@ -46,7 +46,7 @@ def filter_exif(exif: Image.Exif) -> Image.Exif:
 
 
 def process_image_blocking(file_content: bytes) -> io.BytesIO:
-    """Verify, scale, and convert the image and return it as a BytesIO object."""
+    """Verify, scale, and compress the image."""
     image = Image.open(io.BytesIO(file_content))
     image.verify()  # "...after using this method, you must reopen the image file."
     image = Image.open(io.BytesIO(file_content))
@@ -92,7 +92,7 @@ async def process_image(file: UploadFile = File(...)):
         raise HTTPException(status_code=422, detail=INVALID_MIME_ERROR)
     file_content = await file.read()  # read the file into memory
     try:
-        output_buffer = await asyncio.to_thread(process_image_blocking, file_content)
+        output_buffer = await asyncio.to_thread(process_image_blocking, file_content)  # process
     except UnidentifiedImageError as exc:
         raise HTTPException(status_code=422, detail=INVALID_IMAGE_ERROR) from exc
     return StreamingResponse(content=output_buffer, media_type="image/avif")
