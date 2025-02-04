@@ -1,9 +1,10 @@
 """Image processing service."""
 
 import asyncio
+import hashlib
 import io
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi.responses import RedirectResponse, Response
 from PIL import Image, ImageOps, ExifTags, UnidentifiedImageError
 import pillow_avif  # noqa: F401  # pylint: disable=unused-import
 
@@ -84,7 +85,7 @@ def read_root():
             "content": {"image/avif": {}}
         },
     },
-    response_class=StreamingResponse,  # https://github.com/tiangolo/fastapi/issues/3258
+    response_class=Response,  # https://github.com/tiangolo/fastapi/issues/3258
 )
 async def process_image(file: UploadFile = File(...)):
     """Return the processed image."""
@@ -95,4 +96,10 @@ async def process_image(file: UploadFile = File(...)):
         output_buffer = await asyncio.to_thread(process_image_blocking, file_content)  # process
     except UnidentifiedImageError as exc:
         raise HTTPException(status_code=422, detail=INVALID_IMAGE_ERROR) from exc
-    return StreamingResponse(content=output_buffer, media_type="image/avif")
+    output_content = output_buffer.getvalue()
+    checksum = await asyncio.to_thread(lambda: hashlib.sha256(output_content).hexdigest())
+    return Response(
+        content=output_content,
+        media_type="image/avif",
+        headers={"X-Checksum-SHA256": checksum}
+    )
